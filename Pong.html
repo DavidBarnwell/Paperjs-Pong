@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	
+	<title>Pong</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script type="text/javascript" src="paperjs/dist/paper-full.min.js"></script>
+	<script type="text/paperscript" canvas = "myCanvas">
+	var canvas = document.getElementById("myCanvas");
+	var middle = new Point(canvas.width/2, canvas.height/2);
+
+	var back = new Path.Rectangle(new Point(0,0), new Point(canvas.width,canvas.height));
+	back.fillColor = "black";
+
+	var field = new Path.Rectangle(new Point(10,10), new Point(canvas.width-10,canvas.height-10));
+	field.fillColor = "black";
+	field.strokeColor = "white";
+	field.strokeWidth = 5;
+
+	var center = new Path();
+
+	center.strokeColor = 'white';
+	center.strokeWidth = 5;
+	center.add(new Point(canvas.width/2,10));
+	center.add(new Point(canvas.width/2,canvas.height-10));
+	center.dashArray = [10, 12];
+
+	var points1 = 0;
+	var score1 = new PointText({
+							    point: [canvas.width/2-55, 50],
+							    content: points1,
+							    fillColor: 'white',
+							    fontFamily: 'Courier New',
+							    fontWeight: 'bold',
+							    fontSize: 50
+							});
+
+	var points2 = 0;
+	var score2 = new PointText({
+							    point: [canvas.width/2+25,50],
+							    content: points2,
+							    fillColor: 'white',
+							    fontFamily: 'Courier New',
+							    fontWeight: 'bold',
+							    fontSize: 50
+							});
+
+
+	var start1 = new Point(20, canvas.height/2 -45);
+	var start2 = new Point(canvas.width - 20, canvas.height/2 -45);
+
+	var player1 = new Path.Rectangle(start1, new Point(start1.x+30, start1.y+90));
+	player1.fillColor = "white";
+
+	var player2 = new Path.Rectangle(start2, new Point(start2.x-30, start2.y+90));
+	player2.fillColor = "white";
+
+	
+	var ball = new Path.Circle(new Point(canvas.width/2,canvas.height/2), 15);
+	ball.fillColor = "white";
+	
+
+	var vx = 5;
+	var vy = -5;
+	var angles = [50, 75, -75, -50];
+
+	var rand = Math.random();
+		rand *= angles.length; 
+		rand = Math.floor(rand);
+
+
+	function onFrame(event){
+		
+		ball.position.x = ball.position.x + vx;
+		ball.position.y = ball.position.y + vy;
+		detectCollisions();
+		detectScores();
+
+	}
+
+	function detectCollisions(){
+
+		var collisions1 = ball.getIntersections(player1);
+		var collisions2 = ball.getIntersections(player2);
+
+		if(collisions1.length || collisions2.length ){
+			vx = -vx;	
+		}
+		frameCollisions();
+		
+	}
+
+	function frameCollisions(){
+		console.log
+		if (ball.position.y <= 0  || ball.position.y >= canvas.height){
+			vy = -vy;
+		}
+	}
+
+	function detectScores(){
+		if (ball.position.x >= canvas.width){
+			points1++;
+			score1.content = points1;
+			resetField();
+			
+		}
+		if (ball.position.x <=0){
+			points2++;
+			score2.content = points2;
+			resetField();
+		}
+
+		checkWin();
+	}
+
+	function resetField(){
+		
+		ball.position = middle;
+		player1.position = start1;
+		player2.position = start2;
+		
+	}
+
+	function checkWin(){
+		if( points1==5){
+			
+			 var winner = new PointText({
+							    point: [canvas.width/2-200,50],
+							    content: "Winner",
+							    fillColor: 'white',
+							    fontFamily: 'Courier New',
+							    fontWeight: 'bold',
+							    fontSize: 50
+							});
+
+
+		}
+		if( points2==5){
+			
+			 var winner = new PointText({
+							    point: [canvas.width/2+50,50],
+							    content: "Winner",
+							    fillColor: 'white',
+							    fontFamily: 'Courier New',
+							    fontWeight: 'bold',
+							    fontSize: 50
+							});
+
+
+		}
+	}
+
+	function onKeyDown(event){
+		
+		if(event.key =="s"){
+			player1.position.y = player1.position.y+8;
+		}
+
+		if(event.key =="w"){
+			player1.position.y = player1.position.y-8;		    
+		}
+    
+
+		if(event.key =="down"){
+			player2.position.y = player2.position.y+8;
+		}
+
+		if(event.key =="up"){
+			player2.position.y = player2.position.y-8;
+		}
+		
+		
+	}
+
+	
+
+	
+
+	
+
+
+	</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="1000" height = "600"></canvas>
+	
+</body>
+</html>
