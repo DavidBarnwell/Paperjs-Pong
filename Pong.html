@@ -5,7 +5,7 @@
 	
 	<title>Pong</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script type="text/javascript" src="paperjs/dist/paper-full.min.js"></script>
+	<script type="text/javascript" src="paper-full.min.js"></script>
 	<script type="text/paperscript" canvas = "myCanvas">
 	var canvas = document.getElementById("myCanvas");
 	var middle = new Point(canvas.width/2, canvas.height/2);
@@ -133,7 +133,7 @@
 							    fontWeight: 'bold',
 							    fontSize: 50
 							});
-
+			 finish();
 
 		}
 		if( points2==5){
@@ -147,7 +147,7 @@
 							    fontSize: 50
 							});
 
-
+			 finish();
 		}
 	}
 
@@ -175,7 +175,21 @@
 
 	
 
-	
+	function finish(){
+		var winner = new PointText({
+							    point: [100,canvas.height/2],
+							    content: "Refresh Page to play again",
+							    fillColor: 'white',
+							    fontFamily: 'Courier New',
+							    fontWeight: 'bold',
+							    fontSize: 50
+							});
+		ball.visible = false;
+		score1.visible = false;
+		score2.visible = false;
+
+		pause();
+	}
 
 	
 
